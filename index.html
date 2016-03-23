@@ -26,6 +26,11 @@
   background-color: white;
   color: #333;
 }
+
+.thumbnail img {
+  width: 100%;
+}
+
 </style>
 
 <div id="dropbox-wrapper">
@@ -42,12 +47,7 @@
     </div>
   </div>
 
-  <div class="row">
-    <div id="image-row" class="col-xs-3">
-      <div class="thumbnail">
-        <img src="http://s3.amazonaws.com/revoredev/a/jekjytwm6aqlig.jpg">
-      </div>
-    </div>
+  <div id="image-row" class="row">
   </div>
 
 </div>
@@ -64,7 +64,9 @@ var dropTarget = $("#dropbox"),
 
 var imageRow = $('#image-row');
 
-var template = '<div class="thumbnail">' + '<span class="imageHolder">' + "<img />" + '<span class="uploaded"></span>' + "</span>" + '<div class="progressHolder">' + '<div class="progress"></div>' + "</div>" + "</div>"
+// var template = '<div class="thumbnail">' + '<span class="imageHolder">' + "<img />" + '<span class="uploaded"></span>' + "</span>" + '<div class="progressHolder">' + '<div class="progress"></div>' + "</div>" + "</div>"
+
+var template = '<div class="thumbnail col-xs-3"><img/></div>'
 
 $('#dropbox').filedrop({
     url: "/i/files.json",
