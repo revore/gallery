@@ -5,16 +5,48 @@
 <body>
 
 <style type="text/css">
-  #dropbox {
-    background-color: #333;
-    color: red;
-  }
+
+#dropbox-wrapper {
+  background-color: #eee;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#dropbox {
+  /*width: 50%;*/
+  margin: 0 auto;
+  margin-top: 100px;
+  padding: 2em;
+
+  background-color: white;
+  color: #333;
+}
 </style>
 
-<div id="dropbox" class="clearfix">
-  <span class="message">
-    Drop files here to upload. <br />
-  </span>
+<div id="dropbox-wrapper">
+
+  <div class="row">
+    <div class="col-xs-6 col-xs-offset-3">
+
+      <div id="dropbox" class="clearfix">
+        <span class="message">
+          Drop files here to upload. <br />
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div id="image-row" class="col-xs-12">
+    </div>
+  </div>
+
 </div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
@@ -22,64 +54,127 @@
 <script type="text/javascript" src="//revore.s3.amazonaws.com/vendor/jquery.filedrop-0.min.js"></script>
 
 <script type="text/javascript">
-  $(function() {
-  function r(r) {
-    var i = $(n),
-        s = $("img", i);
-    var o = new FileReader;
-    s.width = 100;
-    s.height = 100;
-    o.onload = function(e) {
-      s.attr("src", e.target.result)
-    };
-    o.readAsDataURL(r);
-    t.hide();
-    i.appendTo(e);
-    $.data(r, i)
-  }
-  function i(e) {
-    t.html(e)
-  }
-  var e = $("#dropbox"),
-      t = $(".message", e);
-  e.filedrop({
-    paramname: "files",
-    maxfiles: 100,
-    maxfilesize: 20,
+$(function() {
+
+var dropTarget = $("#dropbox"),
+    messageTarget = $(".message", dropTarget);
+
+var imageRow = $('#image-row');
+
+var template = '<div class="thumbnail">' + '<span class="imageHolder">' + "<img />" + '<span class="uploaded"></span>' + "</span>" + '<div class="progressHolder">' + '<div class="progress"></div>' + "</div>" + "</div>"
+
+$('#dropbox').filedrop({
+    // fallback_id: 'upload_button',   // an identifier of a standard file input element, becomes the target of "click" events on the dropzone
     url: "/i/files.json",
-    uploadFinished: function(e, t, n) {
-      $.data(t).addClass("done")
+    paramname: "files",
+
+    // withCredentials: true,          // make a cross-origin request with cookies
+    // data: {
+    //     param1: 'value1',           // send POST variables
+    //     param2: function(){
+    //         return calculated_data; // calculate data at time of upload
+    //     },
+    // },
+    // headers: {          // Send additional request headers
+    //     'header': 'value'
+    // },
+    error: function(err, file) {
+        switch(err) {
+            case 'BrowserNotSupported':
+                alert('browser does not support HTML5 drag and drop')
+                break;
+            case 'TooManyFiles':
+                // user uploaded more than 'maxfiles'
+                break;
+            case 'FileTooLarge':
+                // program encountered a file whose size is greater than 'maxfilesize'
+                // FileTooLarge also has access to the file which was too large
+                // use file.name to reference the filename of the culprit file
+                break;
+            case 'FileTypeNotAllowed':
+                // The file type is not in the specified list 'allowedfiletypes'
+                break;
+            case 'FileExtensionNotAllowed':
+                // The file extension is not in the specified list 'allowedfileextensions'
+                break;
+            default:
+                break;
+        }
     },
-    error: function(e, t) {
-      switch (e) {
-      case "BrowserNotSupported":
-        i("Your browser does not support HTML5 file uploads!");
-        break;
-      case "TooManyFiles":
-        alert("Too many files. Please slow down");
-        break;
-      case "FileTooLarge":
-        alert(t.name + " is too large.");
-        break;
-      default:
-        break
-      }
+    allowedfiletypes: ['image/jpeg','image/png','image/gif'],   // filetypes allowed by Content-Type.  Empty array means no restrictions
+    allowedfileextensions: ['.jpg','.jpeg','.png','.gif'], // file extensions allowed. Empty array means no restrictions
+    maxfiles: 25,
+    maxfilesize: 20,    // max file size in MBs
+    // dragOver: function() {
+    //     // user dragging files over #dropzone
+    // },
+    // dragLeave: function() {
+    //     // user dragging files out of #dropzone
+    // },
+    // docOver: function() {
+    //     // user dragging files anywhere inside the browser document window
+    // },
+    // docLeave: function() {
+    //     // user dragging files out of the browser document window
+    // },
+    // drop: function() {
+    //     // user drops file
+    // },
+    uploadStarted: function(i, file, len){
+        // a file began uploading
+        // i = index => 0, 1, 2, 3, 4 etc
+        // file is the actual file of the index
+        // len = total files user dropped
+
+      var imageDom = $(template),
+          image = $("img", imageDom);
+
+      var fileReader = new FileReader;
+      image.width = 100;
+      image.height = 100;
+
+      fileReader.onload = function(e) {
+        image.attr("src", e.target.result)
+      };
+      fileReader.readAsDataURL(file);
+
+      // messageTarget.hide();
+      imageDom.appendTo(imageRow);
+      $.data(file, imageDom);
     },
-    beforeEach: function(e) {
-      if (!e.type.match(/^image\//)) {
-        alert("Only images are allowed!");
-        return false
-      }
-    },
-    uploadStarted: function(e, t, n) {
-      r(t)
-    },
-    progressUpdated: function(e, t, n) {
-      $.data(t).find(".progress").width(n + "%")
-    }
-  });
-  var n = '<div class="preview thumb">' + '<span class="imageHolder">' + "<img />" + '<span class="uploaded"></span>' + "</span>" + '<div class="progressHolder">' + '<div class="progress"></div>' + "</div>" + "</div>"
-})
+    // uploadFinished: function(i, file, response, time) {
+    //     // response is the data you got back from server in JSON format.
+    // },
+    // progressUpdated: function(i, file, progress) {
+    //     // this function is used for large files and updates intermittently
+    //     // progress is the integer value of file being uploaded percentage to completion
+    // },
+    // globalProgressUpdated: function(progress) {
+    //     // progress for all the files uploaded on the current instance (percentage)
+    //     // ex: $('#progress div').width(progress+"%");
+    // },
+    // speedUpdated: function(i, file, speed) {
+    //     // speed in kb/s
+    // },
+    // rename: function(name) {
+    //     // name in string format
+    //     // must return alternate name as string
+    // },
+    // beforeEach: function(file) {
+    //     // file is a file object
+    //     // return false to cancel upload
+    // },
+    // beforeSend: function(file, i, done) {
+    //     // file is a file object
+    //     // i is the file index
+    //     // call done() to start the upload
+    // },
+    // afterAll: function() {
+    //     // runs after all files have been uploaded or otherwise dealt with
+    // }
+});
+
+});
 </script>
 
 </body>
