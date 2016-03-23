@@ -120,7 +120,7 @@ $('#dropbox').filedrop({
       };
       fileReader.readAsDataURL(file);
 
-      messageTarget.hide();
+      messageTarget.text("Uploading...");
       imageDom.appendTo(imageRow);
       $.data(file, imageDom);
     },
