@@ -4,5 +4,83 @@
 </head>
 <body>
 
+<style type="text/css">
+  #dropbox {
+    background-color: #333;
+    color: red;
+  }
+</style>
+
+<div id="dropbox" class="clearfix">
+  <span class="message">
+    Drop files here to upload. <br />
+  </span>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+
+<script type="text/javascript" src="//revore.s3.amazonaws.com/vendor/jquery.filedrop-0.min.js"></script>
+
+<script type="text/javascript">
+  $(function() {
+  function r(r) {
+    var i = $(n),
+        s = $("img", i);
+    var o = new FileReader;
+    s.width = 100;
+    s.height = 100;
+    o.onload = function(e) {
+      s.attr("src", e.target.result)
+    };
+    o.readAsDataURL(r);
+    t.hide();
+    i.appendTo(e);
+    $.data(r, i)
+  }
+  function i(e) {
+    t.html(e)
+  }
+  var e = $("#dropbox"),
+      t = $(".message", e);
+  e.filedrop({
+    paramname: "files",
+    maxfiles: 100,
+    maxfilesize: 20,
+    url: "/i/files.json",
+    uploadFinished: function(e, t, n) {
+      $.data(t).addClass("done")
+    },
+    error: function(e, t) {
+      switch (e) {
+      case "BrowserNotSupported":
+        i("Your browser does not support HTML5 file uploads!");
+        break;
+      case "TooManyFiles":
+        alert("Too many files. Please slow down");
+        break;
+      case "FileTooLarge":
+        alert(t.name + " is too large.");
+        break;
+      default:
+        break
+      }
+    },
+    beforeEach: function(e) {
+      if (!e.type.match(/^image\//)) {
+        alert("Only images are allowed!");
+        return false
+      }
+    },
+    uploadStarted: function(e, t, n) {
+      r(t)
+    },
+    progressUpdated: function(e, t, n) {
+      $.data(t).find(".progress").width(n + "%")
+    }
+  });
+  var n = '<div class="preview thumb">' + '<span class="imageHolder">' + "<img />" + '<span class="uploaded"></span>' + "</span>" + '<div class="progressHolder">' + '<div class="progress"></div>' + "</div>" + "</div>"
+})
+</script>
+
 </body>
 </html>
