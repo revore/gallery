@@ -18,24 +18,26 @@
   padding: 2em;
   background-color: white;
   color: #333;
+  border-radius: 2px;
+  border: 1px solid #ccc;
 }
 
-/* line 20, app.sass */
+/* line 22, app.sass */
 #image-row {
   margin-top: 20px;
 }
 
-/* line 23, app.sass */
+/* line 25, app.sass */
 .thumbnail img {
   width: 100%;
 }
 
-/* line 26, app.sass */
+/* line 28, app.sass */
 .progressHolder {
   background-color: white;
 }
 
-/* line 29, app.sass */
+/* line 31, app.sass */
 .progress {
   background-color: #eee;
 }
