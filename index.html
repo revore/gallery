@@ -1,49 +1,9 @@
 <html>
 <head>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+  <link rel="stylesheet" href="app.css">
 </head>
 <body>
-
-<style type="text/css">
-
-#dropbox-wrapper {
-  background-color: #eee;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-#dropbox {
-  /*width: 50%;*/
-  margin: 0 auto;
-  margin-top: 100px;
-  padding: 2em;
-
-  background-color: white;
-  color: #333;
-}
-
-#image-row {
-  margin-top: 20px;
-}
-
-.thumbnail img {
-  width: 100%;
-}
-
-.progressHolder {
-  background-color: white;
-}
-
-.progress {
-  background-color: #eee;
-}
-
-</style>
 
 <div id="dropbox-wrapper">
 
@@ -66,74 +26,7 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 <script type="text/javascript" src="//revore.s3.amazonaws.com/vendor/jquery.filedrop-0.min.js"></script>
-
-<script type="text/javascript">
-$(function() {
-
-var dropTarget = $("#dropbox"),
-    messageTarget = $(".message", dropTarget);
-
-var imageRow = $('#image-row');
-
-var template = '<div class="thumbnail col-xs-3"><img/><div class="progressHolder"><div class="progress"></div></div></div>'
-
-$('#dropbox').filedrop({
-    url: "/i/files.json",
-    paramname: "files",
-    error: function(err, file) {
-      switch(err) {
-        case 'BrowserNotSupported':
-            alert('browser does not support HTML5 drag and drop')
-            break;
-        case 'TooManyFiles':
-            // user uploaded more than 'maxfiles'
-            break;
-        case 'FileTooLarge':
-            // program encountered a file whose size is greater than 'maxfilesize'
-            // FileTooLarge also has access to the file which was too large
-            // use file.name to reference the filename of the culprit file
-            break;
-        case 'FileTypeNotAllowed':
-            // The file type is not in the specified list 'allowedfiletypes'
-            break;
-        case 'FileExtensionNotAllowed':
-            // The file extension is not in the specified list 'allowedfileextensions'
-            break;
-        default:
-            break;
-      }
-    },
-    allowedfiletypes: ['image/jpeg','image/png','image/gif'],
-    allowedfileextensions: ['.jpg','.jpeg','.png','.gif'],
-    maxfiles: 25,
-    maxfilesize: 20,
-    uploadStarted: function(i, file, len){
-      var imageDom = $(template),
-          image = $("img", imageDom);
-
-      var fileReader = new FileReader;
-      image.width = 100;
-      image.height = 100;
-
-      fileReader.onload = function(e) {
-        image.attr("src", e.target.result)
-      };
-      fileReader.readAsDataURL(file);
-
-      messageTarget.text("Uploading...");
-      imageDom.appendTo(imageRow);
-      $.data(file, imageDom);
-    },
-    progressUpdated: function(i, file, progress) {
-      $.data(file).find(".progress").width(progress + "%");
-      if (progress == 100) {
-        $(".progress").hide();
-      }
-    }
-});
-
-});
-</script>
+<script type="text/javascript" src="app.js"></script>
 
 </body>
 </html>
