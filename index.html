@@ -27,6 +27,10 @@
   color: #333;
 }
 
+#image-row {
+  margin-top: 20px;
+}
+
 .thumbnail img {
   width: 100%;
 }
@@ -64,9 +68,7 @@ var dropTarget = $("#dropbox"),
 
 var imageRow = $('#image-row');
 
-// var template = '<div class="thumbnail">' + '<span class="imageHolder">' + "<img />" + '<span class="uploaded"></span>' + "</span>" + '<div class="progressHolder">' + '<div class="progress"></div>' + "</div>" + "</div>"
-
-var template = '<div class="thumbnail col-xs-3"><img/></div>'
+var template = '<div class="thumbnail col-xs-3"><img/><div class="progressHolder"><div class="progress"></div></div></div>'
 
 $('#dropbox').filedrop({
     url: "/i/files.json",
@@ -115,6 +117,9 @@ $('#dropbox').filedrop({
       imageDom.appendTo(imageRow);
       $.data(file, imageDom);
     },
+    progressUpdated: function(i, file, progress) {
+      $.data(t).find(".progress").width(progress + "%")
+    }
 });
 
 });
