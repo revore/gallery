@@ -85,12 +85,32 @@ var App = React.createClass({
 });
 
 var Router = ReactRouter.Router;
+window.Router = Router;
 var Route = ReactRouter.Route;
+var browserHistory = History.createHashHistory();
 
 ReactDOM.render((
-  <Router>
+  <Router history={browserHistory}>
     <Route path="/" component={App} />
     <Route path="/download" component={DownloadBlock} />
   </Router>
 ), document.getElementById('app'))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
