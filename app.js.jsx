@@ -82,7 +82,11 @@ var App = React.createClass({
   },
 });
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('app')
-);
+var Router = ReactRouter.Router;
+var Route = ReactRouter.Route;
+
+ReactDOM.render((
+  <Router>
+    <Route path="/" component={App} />
+  </Router>
+), document.getElementById('app'))
