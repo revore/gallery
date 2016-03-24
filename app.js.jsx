@@ -77,7 +77,9 @@ var DownloadBlock = React.createClass({
 var App = React.createClass({
   render: function() {
     return (
-      <DownloadBlock />
+      <div>
+        <h1>hello</h1>
+      </div>
     );
   },
 });
@@ -88,5 +90,7 @@ var Route = ReactRouter.Route;
 ReactDOM.render((
   <Router>
     <Route path="/" component={App} />
+    <Route path="/download" component={DownloadBlock} />
   </Router>
 ), document.getElementById('app'))
+
