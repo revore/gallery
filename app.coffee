@@ -1,7 +1,9 @@
 dropTarget = $('#dropbox')
 messageTarget = $('.message', dropTarget)
 imageRow = $('#image-row')
+
 template = '<div class="thumbnail col-xs-3"><img/><div class="progressHolder"><div class="progress"></div></div></div>'
+
 $('#dropbox').filedrop
   url: '/i/files.json'
   paramname: 'files'
