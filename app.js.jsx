@@ -96,7 +96,7 @@ var match = ReactRouter.match;
 var Route = ReactRouter.Route;
 var DefaultRoute = ReactRouter.DefaultRoute;
 
-var browserHistory = History.createHashHistory();
+window.browserHistory = History.createHistory();
 
 var routeSet = (
   <Router history={browserHistory}>
@@ -105,11 +105,11 @@ var routeSet = (
   </Router>
 )
 
-browserHistory.push(window.location.pathname);
 
 ReactDOM.render(routeSet, document.getElementById('app'))
 
 
+window.browserHistory.push(window.location.pathname);
 
 
 
