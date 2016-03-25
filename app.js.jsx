@@ -1,12 +1,3 @@
-var Router = ReactRouter.Router;
-
-var Link = ReactRouter.Link;
-var match = ReactRouter.match;
-var Route = ReactRouter.Route;
-var DefaultRoute = ReactRouter.DefaultRoute;
-
-var browserHistory = History.createHashHistory();
-
 var DownloadBlock = React.createClass({
   componentDidMount: function() {
 
@@ -99,11 +90,15 @@ var App = React.createClass({
 });
 
 var Router = ReactRouter.Router;
-window.Router = Router;
+
+var Link = ReactRouter.Link;
+var match = ReactRouter.match;
 var Route = ReactRouter.Route;
+var DefaultRoute = ReactRouter.DefaultRoute;
+
 var browserHistory = History.createHashHistory();
 
-var routes = (
+var routeSet = (
   <Router history={browserHistory}>
     <Route path="/" component={App} />
     <Route path="/download" component={DownloadBlock} />
@@ -111,7 +106,7 @@ var routes = (
 )
 
 
-ReactDOM.render(routes, document.getElementById('app'))
+ReactDOM.render(routeSet, document.getElementById('app'))
 
 
 
