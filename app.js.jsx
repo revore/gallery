@@ -105,6 +105,7 @@ var routeSet = (
   </Router>
 )
 
+browserHistory.push(window.location.pathname);
 
 ReactDOM.render(routeSet, document.getElementById('app'))
 
