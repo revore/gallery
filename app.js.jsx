@@ -96,18 +96,7 @@ var UploadBlock = React.createClass({
   },
 });
 
-var UploadPage = React.createClass({
-  render: function() {
-    return (
-      <div>
-        <MenuBar />
-        <UploadBlock />
-      </div>
-    );
-  },
-});
-
-var App = React.createClass({
+var AppLayout = React.createClass({
   render: function() {
     return (
       <div>
@@ -118,9 +107,31 @@ var App = React.createClass({
   },
 });
 
+var UploadPage = React.createClass({
+  render: function() {
+    return (
+      <AppLayout>
+        <UploadBlock />
+      </AppLayout>
+    );
+  },
+});
+
+var PhotoGrid = React.createClass({
+  render: function() {
+    return (
+      <AppLayout>
+        <h1>
+          Hello
+        </h1>
+      </AppLayout>
+    );
+  },
+});
+
 var routeSet = (
   <Router history={browserHistory}>
-    <Route path="/" component={App} />
+    <Route path="/" component={PhotoGrid} />
     <Route path="/upload" component={UploadPage} />
   </Router>
 )
