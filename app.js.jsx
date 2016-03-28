@@ -20,7 +20,7 @@ var MenuBar = React.createClass({
   },
 })
 
-var DownloadBlock = React.createClass({
+var UploadBlock = React.createClass({
   componentDidMount: function() {
 
     var dropTarget, imageRow, messageTarget, template;
@@ -74,30 +74,38 @@ var DownloadBlock = React.createClass({
 
   render: function() {
     return (
-      <div>
-        <MenuBar />
-        <div id="dropbox-wrapper">
+      <div id="dropbox-wrapper">
 
-          <div className="row">
-            <div className="col-xs-6 col-xs-offset-3">
+        <div className="row">
+          <div className="col-xs-6 col-xs-offset-3">
 
-              <div id="dropbox" className="clearfix">
-                <span className="message">
-                  Drop files here to upload. <br />
-                </span>
-              </div>
-
+            <div id="dropbox" className="clearfix">
+              <span className="message">
+                Drop files here to upload. <br />
+              </span>
             </div>
-          </div>
 
-          <div id="image-row" className="row">
           </div>
-
         </div>
+
+        <div id="image-row" className="row">
+        </div>
+
       </div>
     );
   },
-})
+});
+
+var UploadPage = React.createClass({
+  render: function() {
+    return (
+      <div>
+        <MenuBar />
+        <UploadBlock />
+      </div>
+    );
+  },
+});
 
 var App = React.createClass({
   render: function() {
@@ -113,7 +121,7 @@ var App = React.createClass({
 var routeSet = (
   <Router history={browserHistory}>
     <Route path="/" component={App} />
-    <Route path="/upload" component={DownloadBlock} />
+    <Route path="/upload" component={UploadPage} />
   </Router>
 )
 
