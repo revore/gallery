@@ -95,39 +95,38 @@ var UploadBlock = React.createClass({
   },
 });
 
-var AppLayout = React.createClass({
+var Photo = React.createClass({
   render: function() {
+    var linkUrl = "/photos/" + this.props.photo.id;
     return (
-      <div>
-        <MenuBar />
-        {this.props.children}
+      <div key={this.props.photo.id} className="col-xs-12">
+        <Link to={linkUrl}>
+          <img src={this.props.photo.original} className="thumbnail photo" />
+        </Link>
       </div>
     );
   },
 });
 
-var UploadPage = React.createClass({
-  render: function() {
-    return (
-      <AppLayout>
-        <UploadBlock />
-      </AppLayout>
-    );
-  },
-});
+// var PhotoPage = React.createClass({
+//   render: function() {
+//     console.log("h1llo");
+//     return (
+//       <h1>
+//         hello
+//       </h1>
+//     );
+//   }
+// });
 
 var PhotoGrid = React.createClass({
   render: function() {
     var photolist = this.props.photos.map(function(photo) {
-      var linkUrl = "/photos/" + photo.id;
       return (
-        <div key={photo.id} className="col-xs-12">
-          <Link to={linkUrl}>
-            <img src={photo.original} className="thumbnail photo" />
-          </Link>
-        </div>
+        <Photo photo={photo} key={photo.id} />
       )
     });
+
     return (
       <div className="row">
         { photolist }
@@ -136,7 +135,7 @@ var PhotoGrid = React.createClass({
   }
 });
 
-var PhotosPage = React.createClass({
+var App = React.createClass({
   getInitialState() {
     return {
       photos: [],
@@ -150,24 +149,27 @@ var PhotosPage = React.createClass({
       })
     });
   },
-
   render: function() {
+    if (this.state.main == undefined) {
+      var mainContent = <PhotoGrid photos={this.state.photos} />;
+    }
     return (
-      <AppLayout>
-        <PhotoGrid photos={this.state.photos} />
-      </AppLayout>
+      <div>
+        <MenuBar />
+        {mainContent}
+        {this.props.children}
+      </div>
     );
   },
 });
 
 var routeSet = (
   <Router history={browserHistory}>
-    <Route path="/" component={PhotosPage} />
-    <Route path="/upload" component={UploadPage} />
+    <Route path="/" component={App}>
+      <Route path="/upload" component={UploadBlock} />
+    </Route>
   </Router>
 )
 
 ReactDOM.render(routeSet, document.getElementById('app'))
-
 browserHistory.push(window.location.pathname);
-
