@@ -108,18 +108,28 @@ var Photo = React.createClass({
   },
 });
 
+window.photos = [];
+var resetFiles = function(callback) {
+  $.get("/i/files.json", function(data) {
+    window.photos = data;
+    if (callback != undefined) {
+      callback(data);
+    }
+  });
+}
+
 var PhotoGrid = React.createClass({
   getInitialState() {
     return {
-      photos: [],
+      photos: window.photos,
     };
   },
   componentDidMount: function() {
     var t = this;
-    $.get("/i/files.json", function(data) {
+    resetFiles(function(data) {
       t.setState({
         photos: data,
-      })
+      });
     });
   },
   render: function() {
