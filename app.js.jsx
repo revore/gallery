@@ -18,11 +18,10 @@ var MenuBar = React.createClass({
       </nav>
     )
   },
-})
+});
 
 var UploadBlock = React.createClass({
   componentDidMount: function() {
-
     var dropTarget, imageRow, messageTarget, template;
     dropTarget = $('#dropbox');
     messageTarget = $('.message', dropTarget);
@@ -119,11 +118,40 @@ var UploadPage = React.createClass({
 
 var PhotoGrid = React.createClass({
   render: function() {
+    var photolist = this.props.photos.map(function(photo) {
+      return (
+        <div key={photo.id} className="col-xs-12">
+          <img src={photo.original} className="thumbnail photo" />
+        </div>
+      )
+    });
+    return (
+      <div className="row">
+        { photolist }
+      </div>
+    )
+  }
+});
+
+var PhotoPage = React.createClass({
+  getInitialState() {
+    return {
+      photos: [],
+    };
+  },
+  componentDidMount: function() {
+    var t = this;
+    $.get("/i/files.json", function(data) {
+      t.setState({
+        photos: data,
+      })
+    });
+  },
+
+  render: function() {
     return (
       <AppLayout>
-        <h1>
-          Hello
-        </h1>
+        <PhotoGrid photos={this.state.photos} />
       </AppLayout>
     );
   },
@@ -131,7 +159,7 @@ var PhotoGrid = React.createClass({
 
 var routeSet = (
   <Router history={browserHistory}>
-    <Route path="/" component={PhotoGrid} />
+    <Route path="/" component={PhotoPage} />
     <Route path="/upload" component={UploadPage} />
   </Router>
 )
@@ -139,20 +167,4 @@ var routeSet = (
 ReactDOM.render(routeSet, document.getElementById('app'))
 
 browserHistory.push(window.location.pathname);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
