@@ -12,9 +12,10 @@
 /* line 10, app.sass */
 #dropbox-wrapper {
   background-color: #eee;
+  z-index: 1000;
 }
 
-/* line 13, app.sass */
+/* line 14, app.sass */
 #dropbox {
   /*width: 50% */
   margin: 0 auto;
@@ -26,22 +27,36 @@
   border: 1px solid #ccc;
 }
 
-/* line 24, app.sass */
+/* line 25, app.sass */
 #image-row {
   margin-top: 20px;
 }
 
-/* line 27, app.sass */
+/* line 28, app.sass */
 .thumbnail img {
   width: 100%;
 }
 
-/* line 30, app.sass */
+/* line 31, app.sass */
 .progressHolder {
   background-color: white;
 }
 
-/* line 33, app.sass */
+/* line 34, app.sass */
 .progress {
   background-color: #eee;
+}
+
+/* line 37, app.sass */
+.navbar {
+  z-index: 1100;
+}
+/* line 39, app.sass */
+.navbar .gs-grid {
+  margin-top: 2px;
+}
+
+/* line 42, app.sass */
+.icon-upload {
+  font-size: 20px;
 }

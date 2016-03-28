@@ -3,6 +3,23 @@ var Link = ReactRouter.Link;
 var Route = ReactRouter.Route;
 var browserHistory = History.createHistory();
 
+var MenuBar = React.createClass({
+  render: function() {
+    return (
+      <nav className="navbar navbar-light">
+        <ul className="nav navbar-nav">
+          <li className="nav-item">
+            <Link to="/" className="nav-link gs-grid"><i className="icon-th"></i></Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/upload" className="nav-link gs-download"><i className="icon-upload"></i></Link>
+          </li>
+        </ul>
+      </nav>
+    )
+  },
+})
+
 var DownloadBlock = React.createClass({
   componentDidMount: function() {
 
@@ -57,23 +74,26 @@ var DownloadBlock = React.createClass({
 
   render: function() {
     return (
-      <div id="dropbox-wrapper">
+      <div>
+        <MenuBar />
+        <div id="dropbox-wrapper">
 
-        <div className="row">
-          <div className="col-xs-6 col-xs-offset-3">
+          <div className="row">
+            <div className="col-xs-6 col-xs-offset-3">
 
-            <div id="dropbox" className="clearfix">
-              <span className="message">
-                Drop files here to upload. <br />
-              </span>
+              <div id="dropbox" className="clearfix">
+                <span className="message">
+                  Drop files here to upload. <br />
+                </span>
+              </div>
+
             </div>
-
           </div>
-        </div>
 
-        <div id="image-row" className="row">
-        </div>
+          <div id="image-row" className="row">
+          </div>
 
+        </div>
       </div>
     );
   },
@@ -83,11 +103,7 @@ var App = React.createClass({
   render: function() {
     return (
       <div>
-        <h1>App</h1>
-        <ul>
-          <li><Link to="/">root</Link></li>
-          <li><Link to="/download">download</Link></li>
-        </ul>
+        <MenuBar />
         {this.props.children}
       </div>
     );
@@ -97,7 +113,7 @@ var App = React.createClass({
 var routeSet = (
   <Router history={browserHistory}>
     <Route path="/" component={App} />
-    <Route path="/download" component={DownloadBlock} />
+    <Route path="/upload" component={DownloadBlock} />
   </Router>
 )
 
