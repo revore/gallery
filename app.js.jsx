@@ -133,7 +133,7 @@ var PhotoGrid = React.createClass({
   }
 });
 
-var PhotoPage = React.createClass({
+var PhotosPage = React.createClass({
   getInitialState() {
     return {
       photos: [],
@@ -159,7 +159,7 @@ var PhotoPage = React.createClass({
 
 var routeSet = (
   <Router history={browserHistory}>
-    <Route path="/" component={PhotoPage} />
+    <Route path="/" component={PhotosPage} />
     <Route path="/upload" component={UploadPage} />
   </Router>
 )
