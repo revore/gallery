@@ -119,9 +119,12 @@ var UploadPage = React.createClass({
 var PhotoGrid = React.createClass({
   render: function() {
     var photolist = this.props.photos.map(function(photo) {
+      var linkUrl = "/photos/" + photo.id;
       return (
         <div key={photo.id} className="col-xs-12">
-          <img src={photo.original} className="thumbnail photo" />
+          <Link to={linkUrl}>
+            <img src={photo.original} className="thumbnail photo" />
+          </Link>
         </div>
       )
     });
