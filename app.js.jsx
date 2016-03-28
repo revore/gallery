@@ -108,33 +108,7 @@ var Photo = React.createClass({
   },
 });
 
-var PhotoPage = React.createClass({
-  render: function() {
-    return (
-      <h1>
-        hello
-      </h1>
-    );
-  }
-});
-
 var PhotoGrid = React.createClass({
-  render: function() {
-    var photolist = this.props.photos.map(function(photo) {
-      return (
-        <Photo photo={photo} key={photo.id} />
-      )
-    });
-
-    return (
-      <div className="row">
-        { photolist }
-      </div>
-    )
-  }
-});
-
-var App = React.createClass({
   getInitialState() {
     return {
       photos: [],
@@ -149,9 +123,36 @@ var App = React.createClass({
     });
   },
   render: function() {
-    if (this.state.main == undefined) {
-      var mainContent = <PhotoGrid photos={this.state.photos} />;
+    var t = this;
+    if (this.props.params != null && this.props.params.photoId != null) {
+      var photos = _.filter(this.state.photos, function(photo) {
+        return photo.id == t.props.params.photoId;
+      })
     }
+    else {
+      var photos = this.state.photos;
+    }
+
+    var photolist = photos.map(function(photo) {
+      return (
+        <Photo photo={photo} key={photo.id} />
+      )
+    });
+
+    return (
+      <div className="row">
+        { photolist }
+      </div>
+    )
+  }
+});
+
+var App = React.createClass({
+  render: function() {
+    if (this.props.children == undefined) {
+      var mainContent = <PhotoGrid />;
+    }
+
     return (
       <div>
         <MenuBar />
@@ -166,7 +167,7 @@ var routeSet = (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <Route path="/upload" component={UploadBlock} />
-      <Route path="/photos/:photoId" component={PhotoPage} />
+      <Route path="/photos/:photoId" component={PhotoGrid} />
     </Route>
   </Router>
 )
