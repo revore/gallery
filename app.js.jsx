@@ -108,16 +108,15 @@ var Photo = React.createClass({
   },
 });
 
-// var PhotoPage = React.createClass({
-//   render: function() {
-//     console.log("h1llo");
-//     return (
-//       <h1>
-//         hello
-//       </h1>
-//     );
-//   }
-// });
+var PhotoPage = React.createClass({
+  render: function() {
+    return (
+      <h1>
+        hello
+      </h1>
+    );
+  }
+});
 
 var PhotoGrid = React.createClass({
   render: function() {
@@ -167,6 +166,7 @@ var routeSet = (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <Route path="/upload" component={UploadBlock} />
+      <Route path="/photos/:photoId" component={PhotoPage} />
     </Route>
   </Router>
 )
