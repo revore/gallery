@@ -6,6 +6,7 @@ $DIALOGCOLOR: rgba(0,0,0,0.3)
 
 .top-overlay-nav
   z-index: 1100
+  position: relative
   ul
     list-style-type: none
     margin: 0
@@ -24,6 +25,8 @@ $DIALOGCOLOR: rgba(0,0,0,0.3)
     text-decoration: none
 
 #dropbox-wrapper
+  background-color: #eee
+  z-index: 1000
   width: 100%
   height: 100%
   position: fixed
@@ -32,16 +35,10 @@ $DIALOGCOLOR: rgba(0,0,0,0.3)
   right: 0
   bottom: 0
 
-#dropbox-wrapper
-  background-color: #eee
-  z-index: 1000
-
 #dropbox
-  /*width: 50%*/
   margin: 0 auto
   margin-top: 100px
   padding: 2em
-
   background-color: white
   color: #333
   border-radius: 2px
