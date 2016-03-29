@@ -6,13 +6,13 @@ var browserHistory = History.createHistory();
 var MenuBar = React.createClass({
   render: function() {
     return (
-      <nav className="navbar navbar-light">
-        <ul className="nav navbar-nav">
-          <li className="nav-item">
-            <Link to="/" className="nav-link gs-grid"><i className="icon-th"></i></Link>
+      <nav className="top-overlay-nav">
+        <ul className="">
+          <li className="">
+            <Link to="/" className="gs-grid"><i className="icon-th"></i></Link>
           </li>
-          <li className="nav-item">
-            <Link to="/upload" className="nav-link gs-download"><i className="icon-upload"></i></Link>
+          <li className="">
+            <Link to="/upload" className="gs-download"><i className="icon-upload"></i></Link>
           </li>
         </ul>
       </nav>
