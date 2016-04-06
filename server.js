@@ -17,23 +17,21 @@ app.use(function middleware1(req, res, next) {
   console.log(req.url);
 
   if (req.url.split("/")[1] == "i") {
-    res.write("sdfsdf");
-    res.end();
+    var proxy_req = http.request({
+        host: 'hello-paulmckellar.revoreio.dev',
+        port: 80,
+        method: 'GET',
+        path: "/i",
+    }, function (proxy_res) {
+      proxy_res.on('data', function (data) {
+        res.write(data);
+      });
+      proxy_res.on('end', function (data) {
+        res.end();
+      });
+    });
+    proxy_req.end();
 
-    // var Http = require('http');
-    // var proxy_req = Http.request({
-    //     host: 'hello-paulmckellar.revoreio.dev',
-    //     port: 80,
-    //     method: 'GET',
-    //     path: "/i",
-    // }, function (proxy_res) {
-    //   proxy_res.on('data', function (data) {
-    //     res.write(data);
-    //   });
-    //   proxy_res.on('end', function (data) {
-    //     res.end();
-    //   });
-    // });
   }
   else {
     next();
