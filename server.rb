@@ -1,5 +1,6 @@
 require 'socket'
 require 'uri'
+require 'net/http'
 
 # Files will be served from this directory
 WEB_ROOT = './'
@@ -48,6 +49,8 @@ loop do
   path = requested_file(request_line)
   path = File.join(path, 'index.html') if File.directory?(path)
 
+  puts path.split("/")[1]
+
   # Make sure the file exists and is not a directory
   # before attempting to open it.
   if File.exist?(path) && !File.directory?(path)
@@ -62,6 +65,19 @@ loop do
       # write the contents of the file to the socket
       IO.copy_stream(file, socket)
     end
+  elsif path.split("/")[1] == "i"
+    path = path[1..path.length]
+    message = Net::HTTP.get('hello-paulmckellar.revoreio.dev', path) # => String
+
+    # respond with a 404 error code to indicate the file does not exist
+    socket.print "HTTP/1.1 200 OK\r\n" +
+                 "Content-Type: text/html\r\n" +
+                 "Content-Length: #{message.size}\r\n" +
+                 "Connection: close\r\n"
+
+    socket.print "\r\n"
+
+    socket.print message
   else
     message = "File not found\n"
 
