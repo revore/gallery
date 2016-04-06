@@ -7,6 +7,7 @@ var serve = serveStatic("./");
 
 var app = connect();
 app.use(function static(req, res, next) {
+  console.log("======");
   serve(req, res, next);
 });
 
@@ -30,8 +31,6 @@ app.use(function middleware1(req, res, next) {
         res.end();
       });
     });
-
-    // proxy_req.end();
   }
   else {
     next();
