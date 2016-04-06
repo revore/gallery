@@ -43,8 +43,6 @@ app.use(function middleware1(req, res, next) {
     });
 
     req.on('data', function (data) {
-      console.log("incoming data");
-      console.log(data);
       proxy_req.write(data);
     });
     req.on('end', function (data) {
