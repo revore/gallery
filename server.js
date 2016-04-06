@@ -23,7 +23,7 @@ app.use(function middleware1(req, res, next) {
 
   if (req.url.split("/")[1] == "i") {
     var options = {
-      host: 'hello-paulmckellar.revoreio.dev',
+      host: 'gallery-paulmckellar.revoreio.dev',
       port: 80,
       method: req.method,
       path: req.url,
@@ -35,6 +35,8 @@ app.use(function middleware1(req, res, next) {
     }
 
     var proxy_req = http.request(options, function(proxy_res) {
+      res.writeHead(proxy_res.statusCode, proxy_res.headers);
+
       proxy_res.on('data', function (data) {
         res.write(data);
       });
