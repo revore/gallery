@@ -2,6 +2,8 @@ var connect = require('connect'),
     serveStatic = require('serve-static');
 var http = require('http');
 var fs = require('fs');
+var url = require('url');
+
 
 var serve = serveStatic("./");
 
@@ -15,14 +17,22 @@ app.use(function middleware1(req, res, next) {
   console.log("middle");
   console.log(req.method);
   console.log(req.url);
+  // var url_parts = url.parse(req.url, true);
+  // console.log(url_parts);
 
   if (req.url.split("/")[1] == "i") {
-    var proxy_req = http.request({
-        host: 'hello-paulmckellar.revoreio.dev',
-        port: 80,
-        method: req.method,
-        path: req.url,
-    }, function (proxy_res) {
+    var options = {
+      host: 'hello-paulmckellar.revoreio.dev',
+      port: 80,
+      method: req.method,
+      path: req.url,
+      // headers: {
+      //   'Content-Type': 'application/x-www-form-urlencoded',
+      //   'Content-Length': Buffer.byteLength(post_data)
+      // }
+    }
+
+    var proxy_req = http.request(options, function(proxy_res) {
       proxy_res.on('data', function (data) {
         res.write(data);
       });
@@ -30,7 +40,15 @@ app.use(function middleware1(req, res, next) {
         res.end();
       });
     });
-    proxy_req.end();
+
+    req.on('data', function (data) {
+      console.log("incoming data");
+      console.log(data);
+      proxy_req.write(data);
+    });
+    req.on('end', function (data) {
+      proxy_req.end();
+    });
 
   }
   else {
