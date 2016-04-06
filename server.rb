@@ -1,11 +1,12 @@
+# Orginally taken from
+# https://www.practicingruby.com/articles/implementing-an-http-file-server
+
 require 'socket'
 require 'uri'
 require 'net/http'
 
-# Files will be served from this directory
 WEB_ROOT = './'
 
-# Map extensions to their content type
 CONTENT_TYPE_MAPPING = {
   'html' => 'text/html',
   'txt' => 'text/plain',
@@ -13,19 +14,12 @@ CONTENT_TYPE_MAPPING = {
   'jpg' => 'image/jpeg'
 }
 
-# Treat as binary data if content type cannot be found
 DEFAULT_CONTENT_TYPE = 'application/octet-stream'
-
-# This helper function parses the extension of the
-# requested file and then looks up its content type.
 
 def content_type(path)
   ext = File.extname(path).split(".").last
   CONTENT_TYPE_MAPPING.fetch(ext, DEFAULT_CONTENT_TYPE)
 end
-
-# This helper function parses the Request-Line and
-# generates a path to a file on the server.
 
 def requested_file(request_line = nil)
   request_uri  = request_line.split(" ")[1]
@@ -33,10 +27,18 @@ def requested_file(request_line = nil)
   File.join(WEB_ROOT, path)
 end
 
-# Except where noted below, the general approach of
-# handling requests and generating responses is
-# similar to that of the "Hello World" example
-# shown earlier.
+def render_not_found(socket)
+  message = "File not found\n"
+
+  socket.print "HTTP/1.1 404 Not Found\r\n" +
+               "Content-Type: text/plain\r\n" +
+               "Content-Length: #{message.size}\r\n" +
+               "Connection: close\r\n"
+
+  socket.print "\r\n"
+
+  socket.print message
+end
 
 server = TCPServer.new('localhost', 2345)
 
@@ -51,8 +53,6 @@ loop do
 
   puts path.split("/")[1]
 
-  # Make sure the file exists and is not a directory
-  # before attempting to open it.
   if File.exist?(path) && !File.directory?(path)
     File.open(path, "rb") do |file|
       socket.print "HTTP/1.1 200 OK\r\n" +
@@ -62,14 +62,12 @@ loop do
 
       socket.print "\r\n"
 
-      # write the contents of the file to the socket
       IO.copy_stream(file, socket)
     end
   elsif path.split("/")[1] == "i"
     path = path[1..path.length]
-    message = Net::HTTP.get('hello-paulmckellar.revoreio.dev', path) # => String
+    message = Net::HTTP.get('hello-paulmckellar.revoreio.dev', path)
 
-    # respond with a 404 error code to indicate the file does not exist
     socket.print "HTTP/1.1 200 OK\r\n" +
                  "Content-Type: text/html\r\n" +
                  "Content-Length: #{message.size}\r\n" +
@@ -79,17 +77,7 @@ loop do
 
     socket.print message
   else
-    message = "File not found\n"
-
-    # respond with a 404 error code to indicate the file does not exist
-    socket.print "HTTP/1.1 404 Not Found\r\n" +
-                 "Content-Type: text/plain\r\n" +
-                 "Content-Length: #{message.size}\r\n" +
-                 "Connection: close\r\n"
-
-    socket.print "\r\n"
-
-    socket.print message
+    render_not_found(socket)
   end
 
   socket.close
