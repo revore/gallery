@@ -20,8 +20,8 @@ app.use(function middleware1(req, res, next) {
     var proxy_req = http.request({
         host: 'hello-paulmckellar.revoreio.dev',
         port: 80,
-        method: 'GET',
-        path: "/i",
+        method: req.method,
+        path: req.url,
     }, function (proxy_res) {
       proxy_res.on('data', function (data) {
         res.write(data);
