@@ -5,6 +5,18 @@ var browserHistory = History.createHistory();
 
 var MenuBar = React.createClass({
   render: function() {
+
+    if (typeof(Revore) != "undefined" && Revore.isOwner == true) {
+      var ownerStyle = {
+        "display": "block"
+      }
+    }
+    else {
+      var ownerStyle = {
+        "display": "none"
+      }
+    }
+
     return (
       <nav className="top-overlay-nav">
         <ul className="">
@@ -12,7 +24,7 @@ var MenuBar = React.createClass({
             <Link to="/" className="gs-grid"><i className="icon-th"></i></Link>
           </li>
           <li className="">
-            <Link to="/upload" className="gs-download"><i className="icon-upload"></i></Link>
+            <Link to="/upload" className="gs-download" style={ownerStyle}><i className="icon-upload"></i></Link>
           </li>
         </ul>
       </nav>
