@@ -1,6 +1,7 @@
 var connect = require('connect'),
     serveStatic = require('serve-static');
 var http = require('http');
+var fs = require('fs');
 
 var serve = serveStatic("./");
 
@@ -10,10 +11,44 @@ app.use(function static(req, res, next) {
 });
 
 app.use(function middleware1(req, res, next) {
+  console.log("middle");
+  console.log(req.method);
+  console.log(req.url);
+
   if (req.url.split("/")[1] == "i") {
-    console.log("internal");
+    var Http = require('http');
+    var proxy_req = Http.request({
+        host: 'hello-paulmckellar.revoreio.dev',
+        port: 80,
+        method: 'GET',
+        path: req.url,
+    }, function (proxy_res) {
+      proxy_res.on('data', function (data) {
+        res.write(data);
+      });
+      proxy_res.on('end', function (data) {
+        res.end();
+      });
+    });
+
+    // proxy_req.end();
   }
-  next();
+  else {
+    next();
+  }
+});
+
+app.use(function middleware1(req, res, next) {
+  console.log("write index missing");
+  console.log(req.url);
+
+  fs.readFile('./index.html', (err, data) => {
+    if (err) throw err;
+    res.write(data);
+    res.end();
+  });
+
+  // next();
 });
 
 http.createServer(app).listen(3000);
