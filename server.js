@@ -16,11 +16,10 @@ app.use(function static(req, res, next) {
 app.use(function middleware1(req, res, next) {
   console.log("middle");
   console.log(req.method);
-  console.log(req.headers);
   console.log(req.url);
-  var url_parts = url.parse(req.url, true);
-  console.log(url_parts);
-  console.log(req.body);
+  // console.log(req.headers);
+  // var url_parts = url.parse(req.url, true);
+  // console.log(url_parts);
 
   if (req.url.split("/")[1] == "i") {
     var options = {
@@ -28,10 +27,11 @@ app.use(function middleware1(req, res, next) {
       port: 80,
       method: req.method,
       path: req.url,
-      headers: {
-        'Content-Type': req.headers["content-type"],
-      //   'Content-Length': Buffer.byteLength(post_data)
-      }
+      headers: {},
+    }
+
+    if (req.headers["content-type"]) {
+      options["headers"]["Content-Type"] = req.headers["content-type"]
     }
 
     var proxy_req = http.request(options, function(proxy_res) {
