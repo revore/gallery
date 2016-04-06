@@ -49,11 +49,37 @@ loop do
   STDERR.puts request_line
 
   path = requested_file(request_line)
+  method = request_line.split(" ")[0]
   path = File.join(path, 'index.html') if File.directory?(path)
 
   puts path.split("/")[1]
 
-  if File.exist?(path) && !File.directory?(path)
+  if path.split("/")[1] == "i"
+    if method == "GET"
+      path = path[1..path.length]
+      message = Net::HTTP.get('hello-paulmckellar.revoreio.dev', path)
+
+      socket.print "HTTP/1.1 200 OK\r\n" +
+                   "Content-Type: text/html\r\n" +
+                   "Content-Length: #{message.size}\r\n" +
+                   "Connection: close\r\n"
+
+      socket.print "\r\n"
+
+      socket.print message
+    else
+      path = path[1..path.length]
+
+      uri = URI.parse("http://hello-paulmckellar.revoreio.dev" + path)
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Post.new(uri.request_uri)
+      request.body = socket.gets
+      # request["Content-Type"] = "multipart/form-data, boundary=#{BOUNDARY}"
+
+      http.request(request)
+    end
+  elsif File.exist?(path) && !File.directory?(path)
     File.open(path, "rb") do |file|
       socket.print "HTTP/1.1 200 OK\r\n" +
                    "Content-Type: #{content_type(file)}\r\n" +
@@ -64,20 +90,18 @@ loop do
 
       IO.copy_stream(file, socket)
     end
-  elsif path.split("/")[1] == "i"
-    path = path[1..path.length]
-    message = Net::HTTP.get('hello-paulmckellar.revoreio.dev', path)
-
-    socket.print "HTTP/1.1 200 OK\r\n" +
-                 "Content-Type: text/html\r\n" +
-                 "Content-Length: #{message.size}\r\n" +
-                 "Connection: close\r\n"
-
-    socket.print "\r\n"
-
-    socket.print message
   else
-    render_not_found(socket)
+    path = "./index.html"
+    File.open(path, "rb") do |file|
+      socket.print "HTTP/1.1 200 OK\r\n" +
+                   "Content-Type: #{content_type(file)}\r\n" +
+                   "Content-Length: #{file.size}\r\n" +
+                   "Connection: close\r\n"
+
+      socket.print "\r\n"
+
+      IO.copy_stream(file, socket)
+    end
   end
 
   socket.close
