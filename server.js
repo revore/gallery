@@ -8,15 +8,12 @@ var url = require('url');
 var serve = serveStatic("./");
 
 var app = connect();
-app.use(function static(req, res, next) {
-  console.log("======");
-  serve(req, res, next);
-});
+app.use(serve);
 
 app.use(function middleware1(req, res, next) {
-  console.log("middle");
-  console.log(req.method);
-  console.log(req.url);
+  // console.log("middle");
+  // console.log(req.method);
+  // console.log(req.url);
   // console.log(req.headers);
   // var url_parts = url.parse(req.url, true);
   // console.log(url_parts);
@@ -61,16 +58,14 @@ app.use(function middleware1(req, res, next) {
 });
 
 app.use(function middleware1(req, res, next) {
-  console.log("write index missing");
-  console.log(req.url);
+  // console.log("write index missing");
+  // console.log(req.url);
 
   fs.readFile('./index.html', (err, data) => {
     if (err) throw err;
     res.write(data);
     res.end();
   });
-
-  // next();
 });
 
 http.createServer(app).listen(3000);
