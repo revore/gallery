@@ -130,6 +130,12 @@ var resetFiles = function(callback) {
   });
 }
 
+var resetFiles = function(callback) {
+  $.get("/i/user.json", function(data) {
+    window.userLoggedIn = data;
+  });
+}
+
 var PhotoGrid = React.createClass({
   getInitialState() {
     return {
