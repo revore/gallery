@@ -5,6 +5,18 @@ var browserHistory = History.createHistory();
 
 var MenuBar = React.createClass({
   render: function() {
+
+    if (typeof(Revore) != "undefined" && Revore.isOwner == true) {
+      var ownerStyle = {
+        "display": "block"
+      }
+    }
+    else {
+      var ownerStyle = {
+        "display": "none"
+      }
+    }
+
     return (
       <nav className="top-overlay-nav">
         <ul className="">
@@ -12,7 +24,7 @@ var MenuBar = React.createClass({
             <Link to="/" className="gs-grid"><i className="icon-th"></i></Link>
           </li>
           <li className="">
-            <Link to="/upload" className="gs-download"><i className="icon-upload"></i></Link>
+            <Link to="/upload" className="gs-download" style={ownerStyle}><i className="icon-upload"></i></Link>
           </li>
         </ul>
       </nav>
@@ -99,6 +111,19 @@ var Photo = React.createClass({
   render: function() {
     var linkUrl = "/photos/" + this.props.photo.id;
     return (
+      <div key={this.props.photo.id} className="col-xs-3">
+        <Link to={linkUrl}>
+          <img src={this.props.photo.original} className="thumbnail photo" />
+        </Link>
+      </div>
+    );
+  },
+});
+
+var PhotoLarge = React.createClass({
+  render: function() {
+    var linkUrl = "/photos/" + this.props.photo.id;
+    return (
       <div key={this.props.photo.id} className="col-xs-12">
         <Link to={linkUrl}>
           <img src={this.props.photo.original} className="thumbnail photo" />
@@ -115,6 +140,12 @@ var resetFiles = function(callback) {
     if (callback != undefined) {
       callback(data);
     }
+  });
+}
+
+var resetUser = function(callback) {
+  $.get("/i/user.json", function(data) {
+    window.userLoggedIn = data;
   });
 }
 
@@ -138,16 +169,23 @@ var PhotoGrid = React.createClass({
       var photos = _.filter(this.state.photos, function(photo) {
         return photo.id == t.props.params.photoId;
       })
+
+      var photolist = photos.map(function(photo) {
+        return (
+          <PhotoLarge photo={photo} key={photo.id} />
+        )
+      });
+
     }
     else {
       var photos = this.state.photos;
-    }
 
-    var photolist = photos.map(function(photo) {
-      return (
-        <Photo photo={photo} key={photo.id} />
-      )
-    });
+      var photolist = photos.map(function(photo) {
+        return (
+          <Photo photo={photo} key={photo.id} />
+        )
+      });
+    }
 
     return (
       <div className="row">
