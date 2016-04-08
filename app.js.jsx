@@ -111,7 +111,7 @@ var Photo = React.createClass({
   render: function() {
     var linkUrl = "/photos/" + this.props.photo.id;
     return (
-      <div key={this.props.photo.id} className="col-xs-3">
+      <div key={this.props.photo.id} className="col-xs-12">
         <Link to={linkUrl}>
           <img src={this.props.photo.original} className="thumbnail photo" />
         </Link>
