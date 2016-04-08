@@ -130,7 +130,7 @@ var resetFiles = function(callback) {
   });
 }
 
-var resetFiles = function(callback) {
+var resetUser = function(callback) {
   $.get("/i/user.json", function(data) {
     window.userLoggedIn = data;
   });
